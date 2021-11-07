@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework4</title>
+    <link href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet"> <!--load all styles -->
+    <style>
+        /* 英文字型 */
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap');
+
+        #idFieldset{
+            width:70%;
+            margin: 5% auto;
+            border:5px solid #BEBEBE;
+            border-radius: 20px;
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: 500;
+            background-color:#FFFCEC;
+            text-align: center;
+        }
+        button{
+            width: 60px;
+            height: 60px;
+            margin: 1%;
+            text-align: center;
+            background-color:#ECFFFF;
+            border-radius:50%;
+            font-weight: bolder;
+            font-size: 1.2em;
+        }
+
+    </style>
+    <script>
+        let imgLinkObject = {
+            "img1": "http://www.hondao.org.tw/news-detail/1003",
+            "img2": "https://hondao.eoffering.org.tw/contents/project_ct?page=1&p_id=71",
+            "img3": "https://hondao.eoffering.org.tw/contents/project_ct?page=1&p_id=62",
+            "img4": "http://www.hondao.org.tw/news-detail/1004",
+            "img5": "https://hondao.eoffering.org.tw/contents/project_ct?page=1&p_id=32",
+        }
+        let index = 1;
+        let intervalID = null;
+        function changeImgAndLink(num) {
+            let aEle = document.getElementById(`idA`);
+            aEle.href = imgLinkObject[`img${num}`];
+            let imgEle = document.getElementById(`idImg`);
+            imgEle.src = `images/img${num}.jpg`;
+        }
+
+        function onInterval(){
+            changeImgAndLink(index);
+            index++;
+            if(index === 6){
+                index = 1;
+            }
+        }
+
+        function onBtnClick(num) {
+            changeImgAndLink(num);
+            index = num;
+        }
+
+        function createBtn(){
+            let docFrag = document.createDocumentFragment();
+            
+            //照片1-5的btn
+            for(let i=1; i<=5; i++){
+                let eleBtn = document.createElement("button");
+                eleBtn.setAttribute("id",`btn${i}`);
+                eleBtn.innerHTML = i;
+                eleBtn.addEventListener("click", onBtnClick.bind(null, i));
+                docFrag.appendChild(eleBtn);
+            }
+            //開始結束鍵
+            let eleDiv = document.createElement("div");
+            let eleBtnStart = document.createElement("button");
+            eleBtnStart.setAttribute("class","fas fa-pause");
+            eleBtnStart.addEventListener("click", function(){
+                //判斷開始跟暫停計時器
+                if(intervalID){
+                    clearInterval(intervalID);
+                    intervalID = null;
+                    eleBtnStart.setAttribute("class","fas fa-caret-right fa-w-6 fa-2x");
+                }else{
+                    intervalID = window.setInterval(onInterval,3000);
+                    eleBtnStart.setAttribute("class","fas fa-pause");
+                }
+            });
+            eleDiv.appendChild(eleBtnStart);
+            docFrag.appendChild(eleDiv);
+
+            document.getElementById("idFieldset").appendChild(docFrag);
+        }
+
+        document.addEventListener("DOMContentLoaded",function(){
+            intervalID = window.setInterval(onInterval,3000);
+            onInterval();
+            createBtn();
+        })
+    </script>
+</head>
+<body>
+    <fieldset id="idFieldset">
+        <legend class="lgd1"><h1>Hondao Activities</h1></legend>
+        <a id="idA">
+            <img id="idImg" width="800px" height="450px"></img>
+        </a>
+        <br>
+    </fieldset>
+    
+</body>
+</html>
